@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+set -u
 
 # Define variables
 GITHUB_URL=https://raw.githubusercontent.com/vincentnguyen92/bash/master/supervisor

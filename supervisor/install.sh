@@ -37,13 +37,14 @@ fi
 {
     curl ${GITHUB_URL}/supervisord.conf --output ${SUPERVISOR_DIR}/supervisord.conf && \
     curl ${GITHUB_URL}/sqs_queue_default.conf --output ${SUPERVISOR_DIR}/conf.d/sqs_queue_default.conf
-} || echo "Get the files failure" && exit 1
-
-if [ "${WORKER_ENV}" == "live" ]; then
-    curl ${GITHUB_URL}/sqs_queue_live_notification.conf --output ${SUPERVISOR_DIR}/conf.d/sqs_queue_live_notification.conf && \
-    curl ${GITHUB_URL}/sqs_queue_live_product.conf --output ${SUPERVISOR_DIR}/conf.d/sqs_queue_live_product.conf && \
-    curl ${GITHUB_URL}/sqs_queue_live_store.conf --output ${SUPERVISOR_DIR}/conf.d/sqs_queue_live_store.conf
-fi
+    if [ "${WORKER_ENV}" == "live" ]; then
+        curl ${GITHUB_URL}/sqs_queue_live_notification.conf --output ${SUPERVISOR_DIR}/conf.d/sqs_queue_live_notification.conf && \
+        curl ${GITHUB_URL}/sqs_queue_live_product.conf --output ${SUPERVISOR_DIR}/conf.d/sqs_queue_live_product.conf && \
+        curl ${GITHUB_URL}/sqs_queue_live_store.conf --output ${SUPERVISOR_DIR}/conf.d/sqs_queue_live_store.conf
+    fi
+} || {
+    echo "Get the files failure" && exit 1
+}
 
 echo "Starting supervisor"
 {
